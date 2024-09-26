@@ -20,6 +20,7 @@ public class Task2Job1 {
         private Text taxiID = new Text();
         private Text countPair = new Text();
 
+        // Map function to process each input line
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
 
@@ -42,9 +43,9 @@ public class Task2Job1 {
                     }
 
                     if (gpsError) {
-                        countPair.set("1,1"); // total_count=1, error_count=1
+                        countPair.set("1,1");
                     } else {
-                        countPair.set("1,0"); // total_count=1, error_count=0
+                        countPair.set("1,0");
                     }
 
                     context.write(taxiID, countPair);
@@ -58,6 +59,7 @@ public class Task2Job1 {
     public static class TaxiErrorReducer extends Reducer<Text, Text, Text, FloatWritable> {
         private FloatWritable errorFraction = new FloatWritable();
 
+        // Reduce function to compute the error fraction for each taxi
         public void reduce(Text key, Iterable<Text> values, Context context)
                 throws IOException, InterruptedException {
             int totalTrips = 0;
@@ -86,8 +88,7 @@ public class Task2Job1 {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FloatWritable.class);
 
-        // Add external library to classpath
-        job.addFileToClassPath(new Path("/home/your_username/lib/commons-csv-1.8.jar"));
+        job.addFileToClassPath(new Path("/home/sharmah100/lib/commons-csv-1.8.jar"));
 
         FileInputFormat.addInputPath(job, new Path(args[0])); // Input path
         FileOutputFormat.setOutputPath(job, new Path(args[1])); // Output path

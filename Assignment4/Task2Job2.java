@@ -18,6 +18,7 @@ public class Task2Job2 {
         private PriorityQueue<TaxiErrorRate> queue;
         private final int TOP_K = 5;
 
+        // Setup method initializes the priority queue before the map phase
         protected void setup(Context context) throws IOException, InterruptedException {
             queue = new PriorityQueue<>(TOP_K, Comparator.comparingDouble(tr -> tr.errorRate));
         }
@@ -28,6 +29,7 @@ public class Task2Job2 {
                 String taxiID = tokens[0];
                 float errorRate = Float.parseFloat(tokens[1]);
 
+                // Create a TaxiErrorRate object to hold the taxiID and error rate
                 TaxiErrorRate taxiErrorRate = new TaxiErrorRate(taxiID, errorRate);
                 queue.add(taxiErrorRate);
 
@@ -37,6 +39,7 @@ public class Task2Job2 {
             }
         }
 
+        // Cleanup method is called after all map tasks to emit the top K taxis
         protected void cleanup(Context context) throws IOException, InterruptedException {
             while (!queue.isEmpty()) {
                 TaxiErrorRate tr = queue.poll();
@@ -78,6 +81,7 @@ public class Task2Job2 {
         }
     }
 
+    // Class to store taxiID and error rate as a pair
     static class TaxiErrorRate {
         String taxiID;
         float errorRate;

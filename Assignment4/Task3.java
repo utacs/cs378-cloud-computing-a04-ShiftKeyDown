@@ -42,7 +42,6 @@ public class Task3 {
 
                     // Check for valid trip time
                     if (tripTimeMins > 0) {
-                        // Emit (driverID, "totalAmount,tripTimeMins")
                         earningsAndTime.set(totalAmount + "," + tripTimeMins);
                         context.write(driverID, earningsAndTime);
                     }
@@ -111,7 +110,7 @@ public class Task3 {
         job.setOutputValueClass(DoubleWritable.class);
 
         // Add external library to classpath
-        job.addFileToClassPath(new Path("/home/your_username/lib/commons-csv-1.8.jar"));
+        job.addFileToClassPath(new Path("/home/sharmah100/lib/commons-csv-1.8.jar"));
 
         FileInputFormat.addInputPath(job, new Path(args[0])); // Input path
         FileOutputFormat.setOutputPath(job, new Path(args[1])); // Output path

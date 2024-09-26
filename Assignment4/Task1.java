@@ -24,6 +24,7 @@ public class Task1 {
         private IntWritable hourKey = new IntWritable();
         private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        // Map function to process each input line
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
 
@@ -38,10 +39,10 @@ public class Task1 {
                     String pickupTimeStr = record.get(3).trim();
                     String pickupDateTimeStr = pickupDateStr + " " + pickupTimeStr;
                     Date pickupDateTime = dateFormat.parse(pickupDateTimeStr);
-                    int hour = pickupDateTime.getHours() + 1; // Hours from 0-23; adjust to 1-24
+                    int hour = pickupDateTime.getHours() + 1;
                     hourKey.set(hour);
 
-                    // Check GPS fields (indices 6 to 9)
+                    // Check GPS fields
                     boolean gpsError = false;
                     for (int i = 6; i <= 9; i++) {
                         String gpsValue = record.get(i).trim();
@@ -66,6 +67,7 @@ public class Task1 {
     public static class Task1Reducer extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
         private IntWritable result = new IntWritable();
 
+        // Reduce function to sum values for each hour key
         public void reduce(IntWritable key, Iterable<IntWritable> values, Context context)
                 throws IOException, InterruptedException {
             int sum = 0;
@@ -88,7 +90,7 @@ public class Task1 {
         job.setOutputValueClass(IntWritable.class);
 
         // Add external library to classpath
-        job.addFileToClassPath(new Path("/home/your_username/lib/commons-csv-1.8.jar"));
+        job.addFileToClassPath(new Path("/home/sharmah100/lib/commons-csv-1.8.jar"));
 
         FileInputFormat.addInputPath(job, new Path(args[0])); // Input path
         FileOutputFormat.setOutputPath(job, new Path(args[1])); // Output path
